@@ -9,7 +9,7 @@ class Db
 
     public function __construct()
     {
-        $dsn = 'mysql:host=localhost;dbname=php2';
+        $dsn = 'mysql:host=localhost;dbname=php2;charset=UTF8';
         $user = 'dbuser';
         $password = '123';
         $this->dbh = new \PDO($dsn, $user, $password);
@@ -27,6 +27,13 @@ class Db
         } else {
             return $sth->fetchAll(\PDO::FETCH_CLASS, $class);
         }
+    }
+
+    public function execute($sql, $data = []): bool
+    {
+        $sth = $this->dbh->prepare($sql);
+        return $sth->execute($data);
+
     }
 
 }

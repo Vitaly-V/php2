@@ -1,6 +1,8 @@
 <?php
 
-require __DIR__ . '/autoload.php';
+const DS = DIRECTORY_SEPARATOR;
+require __DIR__ . DS . 'autoload.php';
 
-$data = \App\Models\Author::findAll();
-var_dump($data);
+$news = \App\Models\Article::getLatest(3);
+
+include __DIR__ . DS . 'App' . DS . 'Views' . DS . 'News.php';
