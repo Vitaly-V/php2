@@ -2,11 +2,6 @@
 
 require __DIR__ . '/../autoload.php';
 
-
-class CustomError extends AssertionError
-{
-}
-
 class DbQueryTest
 {
 
