@@ -28,4 +28,28 @@ abstract class Model
         $res = $db->query($sql, [':id' => $id], static::class);
         return !empty($res) ? $res[0] : false;
     }
+
+    public static function getLatest(int $quantity)
+    {
+        $db = new Db();
+        $sql = 'SELECT * FROM ' . self::$table . ' ORDER BY id DESC LIMIT ' . $quantity;
+        return $db->query($sql, [], self::class);
+    }
+
+    public function update()
+    {
+        $sets = [];
+        $data = [];
+        foreach ($this as $key => $value) {
+            $data[':' . $key] = $value;
+            if ('id' == $key) {
+                continue;
+            }
+            $sets[] = $key . '=:' . $key;
+        }
+
+        $db = new Db();
+        $sql = 'UPDATE ' . static::$table . ' SET ' . implode(',', $sets) . ' WHERE id=:id';
+        return $db->execute($sql, $data);
+    }
 }
