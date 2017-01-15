@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App, App\Model;
+use App;
+use App\Model;
 
 class Article extends Model
 {

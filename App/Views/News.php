@@ -9,12 +9,14 @@
 </head>
 <body>
 <h1>Latest news</h1>
-<?php foreach ($news as $article) : ?>
-    <div class="article">
-        <h3 class="title"><a href="/article.php?id=<?= $article->id; ?>"><?= $article->title; ?></a></h3>
-        <div class="text"><?= $article->text; ?></div>
-    </div>
-<?php endforeach; ?>
+<div class="news">
+    <?php foreach ($news as $article) : ?>
+        <div class="article">
+            <h3 class="title"><a href="/article.php?id=<?= $article->id; ?>"><?= $article->title; ?></a></h3>
+            <div class="text"><?= $article->text; ?></div>
+        </div>
+    <?php endforeach; ?>
+</div>
 </body>
 </html>
 

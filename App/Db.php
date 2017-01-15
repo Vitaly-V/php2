@@ -5,14 +5,15 @@ namespace App;
 class Db
 {
 
+    use TSingleton;
+
     protected $dbh;
 
-    public function __construct()
+    protected function __construct()
     {
-        $dsn = 'mysql:host=localhost;dbname=php2;charset=UTF8';
-        $user = 'dbuser';
-        $password = '123';
-        $this->dbh = new \PDO($dsn, $user, $password);
+        $config = Config::getInstance();
+        $dsn = 'mysql:host=' . $config->data['db']['host'] . ';dbname=' . $config->data['db']['name'] . ';charset=' . $config->data['db']['charset'];
+        $this->dbh = new \PDO($dsn, $config->data['db']['user'], $config->data['db']['password']);
     }
 
     public function query($sql, $data = [], $class = null)
@@ -33,7 +34,12 @@ class Db
     {
         $sth = $this->dbh->prepare($sql);
         return $sth->execute($data);
-
     }
+
+    public function lastId(): int
+    {
+        return $this->dbh->lastInsertId();
+    }
+
 
 }
