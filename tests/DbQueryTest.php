@@ -7,7 +7,7 @@ class DbQueryTest
 
     public function testInsert(array $testData): string
     {
-        $db = new \App\Db();
+        $db = new \App\Classes\Db\Db();
         $sql = 'INSERT INTO news(title, text) VALUES (:title, :text)';
         if ($db->execute($sql, $testData)) {
             $msg = 'Success. Row added';
@@ -20,7 +20,7 @@ class DbQueryTest
 
     public function testUpdate(array $testData): string
     {
-        $db = new \App\Db();
+        $db = new \App\Classes\Db\Db();
         $sql = 'UPDATE news SET title = :title, text = :text WHERE id = :id';
         if ($db->execute($sql, $testData)) {
             $msg = 'Success. Row updated';

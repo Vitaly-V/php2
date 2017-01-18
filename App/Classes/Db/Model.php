@@ -1,16 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Classes\Db;
+
 
 abstract class Model
 {
 
-    public static $db;
+    protected $_dbConnection;
     public $id;
 
     public function __construct()
     {
-        static::$db = Db::getInstance();
+        $this->_dbConnection = Db::getInstance();
     }
 
     public static function findAll()
@@ -45,9 +46,9 @@ abstract class Model
     public function save()
     {
         if ($this->id) {
-            $this->update();
+            return $this->update();
         } else {
-            $this->insert();
+            return $this->insert();
         }
     }
 
@@ -57,14 +58,14 @@ abstract class Model
         $data = [];
         foreach ($this as $key => $value) {
             $data[':' . $key] = $value;
-            if ('id' == $key) {
+            if ('id' == $key || '_dbConnection' == $key) {
                 continue;
             }
             $sets[] = $key . '=:' . $key;
         }
 
         $sql = 'UPDATE ' . static::$table . ' SET ' . implode(',', $sets) . ' WHERE id=:id';
-        return static::$db->execute($sql, $data);
+        return $this->_dbConnection->execute($sql, $data);
     }
 
     protected function insert()
@@ -72,16 +73,16 @@ abstract class Model
         $keys = [];
         $data = [];
         foreach ($this as $key => $value) {
-            if ('id' == $key) {
+            if ('id' == $key || '_dbConnection' == $key) {
                 continue;
             }
             $data[':' . $key] = $value;
             $keys[] = $key;
         }
         $sql = 'INSERT INTO ' . static::$table . ' (' . implode(',', $keys) . ') VALUES (' . implode(',', array_keys($data)) . ')';
-        $res = static::$db->execute($sql, $data);
+        $res = $this->_dbConnection->execute($sql, $data);
         if ($res) {
-            $this->id = static::$db->lastId();
+            $this->id = $this->_dbConnection->lastId();
         }
         return $res;
     }
@@ -89,6 +90,6 @@ abstract class Model
     public function delete()
     {
         $sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
-        return static::$db->execute($sql, [':id' => $this->id]);
+        return $this->_dbConnection->execute($sql, [':id' => $this->id]);
     }
 }

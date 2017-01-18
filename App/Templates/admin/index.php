@@ -9,20 +9,8 @@
 </head>
 <body>
 <h1>Admin panel</h1>
+<a href="admin.php?action=add" id="add">Add article</a>
 <div class="news">
-    <form name="add" method="post" action="admin.php">
-        <div class="title"><b>Title:</b><br>
-            <input name="title" type="text" value="<?= ($editId) ? $article->title : '' ?>">
-        </div>
-        <div class="text"><b>Text</b><Br>
-            <textarea name="text"><?= ($editId) ? $article->text : '' ?></textarea>
-        </div>
-        <div>
-            <?= ($editId) ? '<input name="id" type="hidden" value="' . $article->id . '">' : '' ?>
-            <input type="submit" value="<?= ($editId) ? 'Update' : 'Publish' ?>">
-        </div>
-    </form>
-
     <?php foreach ($news as $article) : ?>
         <div class="article">
             <h3 class="title"><?= $article->title; ?></h3>

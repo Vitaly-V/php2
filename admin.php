@@ -3,8 +3,6 @@
 const DS = DIRECTORY_SEPARATOR;
 require __DIR__ . DS . 'autoload.php';
 
-$editId = false;
-
 if (!empty($_POST['title']) && !empty($_POST['text'])) {
     $article = new \App\Models\Article();
     if (!empty($_POST['id'])) {
@@ -16,18 +14,13 @@ if (!empty($_POST['title']) && !empty($_POST['text'])) {
 }
 
 if (!empty($_GET['action']) && !empty($_GET['id'])) {
-    $id = (int)$_GET['id'];
     $action = filter_var($_GET['action'], FILTER_SANITIZE_STRING);
-    $article = \App\Models\Article::findById($id);
-    if (!$article) {
-        header('Location: /index.php');
-    }
     switch ($action) {
         case 'delete':
             $article->delete();
             break;
-        case 'edit':
-            $editId = true;
+        case 'add':
+
     }
 }
 
@@ -35,7 +28,7 @@ if (!empty($_GET['action']) && !empty($_GET['id'])) {
 $news = \App\Models\Article::findAll();
 
 if ($news) {
-    include __DIR__ . DS . 'App' . DS . 'Views' . DS . 'Admin.php';
+    include __DIR__ . DS . 'App' . DS . 'Templates' . DS . 'admin' . DS . 'index.php';
 } else {
     header('Location: /index.php');
 }

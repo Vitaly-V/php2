@@ -1,6 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Classes\Db;
+
+use App\Classes\TSingleton;
+use App\Classes\Config;
 
 class Db
 {
@@ -11,7 +14,7 @@ class Db
 
     protected function __construct()
     {
-        $config = Config::getInstance();
+        $config = Config::getInstance(__DIR__ . DS . '..' . DS . '..' . DS . 'Configs' . DS .  'config.php');
         $dsn = 'mysql:host=' . $config->data['db']['host'] . ';dbname=' . $config->data['db']['name'] . ';charset=' . $config->data['db']['charset'];
         $this->dbh = new \PDO($dsn, $config->data['db']['user'], $config->data['db']['password']);
     }
