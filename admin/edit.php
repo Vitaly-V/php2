@@ -8,5 +8,5 @@ $article = \App\Models\Article::findById($_GET['id']);
 if ($article) {
     include __DIR__ . DS . '..' . DS . 'App' . DS . 'Templates' . DS . 'admin' . DS . 'edit.php';
 } else {
-    header('Location: /index.php');
+    header('Location: /admin/index.php');
 }
