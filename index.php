@@ -3,6 +3,7 @@
 const DS = DIRECTORY_SEPARATOR;
 require __DIR__ . DS . 'autoload.php';
 
-$news = \App\Models\Article::getLatest(3);
+$view = new \App\View();
+$view->news = \App\Models\Article::findAll();
 
-include __DIR__ . DS . 'App' . DS . 'Views' . DS . 'News.php';
+echo $view->render(__DIR__ . DS . 'App' . DS . 'Templates' . DS . 'index.php');

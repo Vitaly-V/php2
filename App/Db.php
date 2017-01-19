@@ -11,7 +11,7 @@ class Db
 
     protected function __construct()
     {
-        $config = Config::getInstance();
+        $config = Config::getInstance(__DIR__ . DS . 'Configs' . DS . 'config.php');
         $dsn = 'mysql:host=' . $config->data['db']['host'] . ';dbname=' . $config->data['db']['name'] . ';charset=' . $config->data['db']['charset'];
         $this->dbh = new \PDO($dsn, $config->data['db']['user'], $config->data['db']['password']);
     }

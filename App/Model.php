@@ -4,15 +4,27 @@ namespace App;
 
 abstract class Model
 {
+    /**
+     * @var \PDO object
+     */
+    protected $db;
 
-    public static $db;
-    public $id;
+    /**
+     *
+     */
+    use TAccessor;
 
+    /**
+     * Model constructor.
+     */
     public function __construct()
     {
-        static::$db = Db::getInstance();
+        $this->db = Db::getInstance();
     }
 
+    /**
+     * @return mixed
+     */
     public static function findAll()
     {
         $db = Db::getInstance();
@@ -20,6 +32,9 @@ abstract class Model
         return $db->query($sql, [], static::class);
     }
 
+    /**
+     * @return int
+     */
     public static function countAll()
     {
         $db = Db::getInstance();
@@ -27,6 +42,10 @@ abstract class Model
         return (int)$db->query($sql, [], static::class)[0]->num;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public static function findById(int $id)
     {
         $db = Db::getInstance();
@@ -35,6 +54,10 @@ abstract class Model
         return !empty($res) ? $res[0] : false;
     }
 
+    /**
+     * @param int $quantity
+     * @return mixed
+     */
     public static function getLatest(int $quantity)
     {
         $db = Db::getInstance();
@@ -42,20 +65,26 @@ abstract class Model
         return $db->query($sql, [], static::class);
     }
 
+    /**
+     * @return bool
+     */
     public function save()
     {
         if ($this->id) {
-            $this->update();
+            return $this->update();
         } else {
-            $this->insert();
+            return $this->insert();
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function update()
     {
         $sets = [];
         $data = [];
-        foreach ($this as $key => $value) {
+        foreach ($this->data as $key => $value) {
             $data[':' . $key] = $value;
             if ('id' == $key) {
                 continue;
@@ -64,14 +93,17 @@ abstract class Model
         }
 
         $sql = 'UPDATE ' . static::$table . ' SET ' . implode(',', $sets) . ' WHERE id=:id';
-        return static::$db->execute($sql, $data);
+        return $this->db->execute($sql, $data);
     }
 
+    /**
+     * @return bool
+     */
     protected function insert()
     {
         $keys = [];
         $data = [];
-        foreach ($this as $key => $value) {
+        foreach ($this->data as $key => $value) {
             if ('id' == $key) {
                 continue;
             }
@@ -79,16 +111,19 @@ abstract class Model
             $keys[] = $key;
         }
         $sql = 'INSERT INTO ' . static::$table . ' (' . implode(',', $keys) . ') VALUES (' . implode(',', array_keys($data)) . ')';
-        $res = static::$db->execute($sql, $data);
+        $res = $this->db->execute($sql, $data);
         if ($res) {
-            $this->id = static::$db->lastId();
+            $this->id = $this->db->lastId();
         }
         return $res;
     }
 
+    /**
+     * @return bool
+     */
     public function delete()
     {
         $sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
-        return static::$db->execute($sql, [':id' => $this->id]);
+        return $this->db->execute($sql, [':id' => $this->id]);
     }
 }

@@ -14,6 +14,7 @@
         <div class="article">
             <h3 class="title"><a href="/article.php?id=<?= $article->id; ?>"><?= $article->title; ?></a></h3>
             <div class="text"><?= $article->text; ?></div>
+            <div class="author">Author: <?= $article->author->firstname; ?> <?= $article->author->firstname; ?></div>
         </div>
     <?php endforeach; ?>
 </div>

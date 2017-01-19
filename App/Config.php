@@ -9,8 +9,8 @@ class Config
 
     public $data = [];
 
-    protected function __construct()
+    protected function __construct($path)
     {
-        $this->data = parse_ini_file(__DIR__ . DS . '..' . DS . 'settings.ini', true);
+        $this->data = include $path;
     }
 }

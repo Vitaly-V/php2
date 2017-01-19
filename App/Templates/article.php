@@ -11,6 +11,7 @@
 <div class="article">
     <h3 class="title"><?= $article->title; ?></h3>
     <div class="text"><?= $article->text; ?></div>
+    <div class="author">Author: <?= $article->author->firstname; ?> <?= $article->author->firstname; ?></div>
     <div>
         <a href="/index.php">Back to the index page</a>
     </div>
