@@ -4,9 +4,6 @@ namespace App;
 
 abstract class Model
 {
-    /**
-     *
-     */
     use TAccessor;
 
     /**
