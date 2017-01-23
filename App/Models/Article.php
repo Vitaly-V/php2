@@ -13,21 +13,14 @@ class Article extends Model
     public static $table = 'news';
 
     /**
-     * @var array Model fields
+     * Models associations linking
+     * @var array
+     *
      */
-    protected $data = [];
-
-    /**
-     * @param $name string
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        if ($name == 'author') {
-            if (isset($this->author_id)) {
-                $this->data['author'] = Author::findById($this->author_id);
-            }
-        }
-        return $this->data[$name];
-    }
+    public $belongsTo = [
+        'author' => [
+            'className' => Author::class,
+            'foreignKey' => 'author_id'
+        ]
+    ];
 }

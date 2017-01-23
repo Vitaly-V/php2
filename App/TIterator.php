@@ -4,6 +4,9 @@ namespace App;
 
 trait TIterator
 {
+
+    protected $data = [];
+
     public function current()
     {
         return current($this->data);

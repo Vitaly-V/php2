@@ -5,14 +5,25 @@ namespace App;
 abstract class Model
 {
     /**
+     *
+     */
+    use TAccessor;
+
+    /**
      * @var \PDO object
      */
     protected $db;
 
     /**
-     *
+     * Models associations linking
+     * @var array
      */
-    use TAccessor;
+    public $belongsTo = [];
+
+    /**
+     * @var array Model fields
+     */
+    protected $data = [];
 
     /**
      * Model constructor.
@@ -21,6 +32,21 @@ abstract class Model
     {
         $this->db = Db::getInstance();
     }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        foreach ($this->data as $key => $value) {
+            if (in_array($name, array_keys($this->belongsTo)) && !isset($this->data[$name])) {
+                $this->data[$name] = $this->belongsTo[$name]['className']::findById($this->data[$this->belongsTo[$name]['foreignKey']]);
+            }
+        }
+        return $this->data[$name];
+    }
+
 
     /**
      * @return mixed
