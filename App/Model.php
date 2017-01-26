@@ -7,16 +7,14 @@ abstract class Model
     use TAccessor;
 
     /**
-     * @var \PDO object
-     */
-    protected $db;
-
-    /**
      * Models associations linking
      * @var array
      */
     public $belongsTo = [];
-
+    /**
+     * @var \PDO object
+     */
+    protected $db;
     /**
      * @var array Model fields
      */
@@ -29,21 +27,6 @@ abstract class Model
     {
         $this->db = Db::getInstance();
     }
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        foreach ($this->data as $key => $value) {
-            if (in_array($name, array_keys($this->belongsTo)) && !isset($this->data[$name])) {
-                $this->data[$name] = $this->belongsTo[$name]['className']::findById($this->data[$this->belongsTo[$name]['foreignKey']]);
-            }
-        }
-        return $this->data[$name];
-    }
-
 
     /**
      * @return mixed
@@ -86,6 +69,20 @@ abstract class Model
         $db = Db::getInstance();
         $sql = 'SELECT * FROM ' . static::$table . ' ORDER BY id DESC LIMIT ' . $quantity;
         return $db->query($sql, [], static::class);
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        foreach ($this->data as $key => $value) {
+            if (in_array($name, array_keys($this->belongsTo)) && !isset($this->data[$name])) {
+                $this->data[$name] = $this->belongsTo[$name]['className']::findById($this->data[$this->belongsTo[$name]['foreignKey']]);
+            }
+        }
+        return $this->data[$name];
     }
 
     /**

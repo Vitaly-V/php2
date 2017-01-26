@@ -13,7 +13,7 @@
     <div class="text"><?= $article->text; ?></div>
     <div class="author">Author: <?= $article->author->firstname; ?> <?= $article->author->firstname; ?></div>
     <div>
-        <a href="/index.php">Back to the index page</a>
+        <a href="/">Back to the index page</a>
     </div>
 </div>
 </body>

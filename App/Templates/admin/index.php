@@ -10,7 +10,7 @@
 <body>
 <h1>Admin panel</h1>
 <div class="news">
-    <form name="add" method="post" action="/admin/save.php">
+    <form name="add" method="post" action="/admin/save?access=admin">
         <div class="title"><b>Title:</b><br>
             <input name="title" type="text">
         </div>
@@ -28,12 +28,13 @@
 
     <?php foreach ($news as $article) : ?>
         <div class="article">
-            <h3 class="title"><a href="/article.php?id=<?= $article->id; ?>"><?= $article->title; ?></a></h3>
+            <h3 class="title"><a href="/index/article/?id=<?= $article->id; ?>&access=admin"><?= $article->title; ?></a>
+            </h3>
             <div class="text"><?= $article->text; ?></div>
             <div class="author">Author: <?= $article->author->firstname; ?> <?= $article->author->firstname; ?></div>
             <div class="action-buttons">
-                <a href="/admin/edit.php?id=<?= $article->id; ?>">Edit</a>
-                <a href="/admin/delete.php?id=<?= $article->id; ?>">Delete</a>
+                <a href="/admin/edit?id=<?= $article->id; ?>&access=admin">Edit</a>
+                <a href="/admin/delete?id=<?= $article->id; ?>&access=admin">Delete</a>
             </div>
         </div>
     <?php endforeach; ?>

@@ -10,7 +10,7 @@
 <body>
 <h1>Admin panel</h1>
 <div class="news">
-    <form name="add" method="post" action="/admin/save.php">
+    <form name="add" method="post" action="/admin/save?access=admin">
         <div class="title"><b>Title:</b><br>
             <input name="title" type="text" value="<?= $article->title; ?>">
         </div>
