@@ -9,15 +9,6 @@ use App\Router;
 class Admin extends Controller
 {
 
-    public function action($name)
-    {
-        if ($this->access()) {
-            parent::action($name);
-        } else {
-            die('Access denied');
-        }
-    }
-
     protected function access(): bool
     {
         return (!empty($_GET['access']) && 'admin' === $_GET['access']);

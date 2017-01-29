@@ -12,12 +12,19 @@ abstract class Controller
         $this->view = new View();
     }
 
-    // I decided to move access method to the Admin controller. I think that Admin controller is better place for such method. What do you think about it?
-
     public function action($name)
     {
-        $action = 'action' . $name;
-        $this->$action();
+        if ($this->access()) {
+            $action = 'action' . $name;
+            $this->$action();
+        } else {
+            die('Access denied');
+        }
+    }
+
+    protected function access(): bool
+    {
+        return true;
     }
 
 }
