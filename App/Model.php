@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Exceptions\MultiException;
+use App\Exceptions\NotFoundException;
+
 abstract class Model
 {
     use TAccessor;
@@ -10,7 +13,14 @@ abstract class Model
      * Models associations linking
      * @var array
      */
-    public $belongsTo = [];
+    public  $belongsTo = [];
+
+    /**
+     * Model required fields
+     * @var array
+     */
+    public $requiredFields = [];
+
     /**
      * @var \PDO object
      */
@@ -19,6 +29,7 @@ abstract class Model
      * @var array Model fields
      */
     protected $data = [];
+
 
     /**
      * Model constructor.
@@ -57,7 +68,11 @@ abstract class Model
         $db = Db::getInstance();
         $sql = 'SELECT * FROM ' . static::$table . ' WHERE id = :id';
         $res = $db->query($sql, [':id' => $id], static::class);
-        return !empty($res) ? $res[0] : false;
+        if (!empty($res)) {
+            return $res[0];
+        } else {
+            throw new NotFoundException('Record not found');
+        }
     }
 
     /**
@@ -146,4 +161,32 @@ abstract class Model
         $sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
         return $this->db->execute($sql, [':id' => $this->id]);
     }
+
+    /**
+     * @param array $data
+     * @return $this
+     * @throws MultiException
+     */
+    public function fill(array $data)
+    {
+        $errors = new MultiException;
+        foreach ($this->requiredFields as $field) {
+            if (isset($data[$field])) {
+                if (!empty($data[$field])) {
+                    $this->$field = $data[$field];
+                } else {
+                    $errors->add(new \Exception('Field ' . $field . ' is empty'));
+                }
+            } else {
+                $errors->add(new \Exception('Field ' . $field . ' is required!'));
+            }
+        }
+
+        if (!$errors->isEmpty()) {
+            throw $errors;
+        }
+
+        return $this;
+    }
+
 }

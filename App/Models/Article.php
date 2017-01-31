@@ -12,6 +12,8 @@ class Article extends Model
      */
     public static $table = 'news';
 
+    public $requiredFields = ['title', 'text'];
+
     /**
      * Models associations linking
      * @var array

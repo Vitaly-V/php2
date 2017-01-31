@@ -12,6 +12,8 @@ class Author extends Model
      */
     public static $table = 'authors';
 
+    public $requiredFields = ['firstname', 'lastname'];
+
     /**
      * Search author by full name
      * @param string $fullName

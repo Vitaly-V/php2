@@ -32,19 +32,17 @@ class Admin extends Controller
 
     public function actionSave()
     {
-        if (!empty($_POST['title']) && !empty($_POST['text']) && !empty($_POST['author'])) {
-            if (empty($_POST['id'])) {
-                $article = new \App\Models\Article();
-            } else {
-                $article = \App\Models\Article::findById($_POST['id']);
-            }
-            $author = $this->getAuthor(filter_var($_POST['author'], FILTER_SANITIZE_STRING));
-            $article->title = filter_var($_POST['title'], FILTER_SANITIZE_STRING);
-            $article->text = filter_var($_POST['text'], FILTER_SANITIZE_STRING);
-            $article->author_id = $author->id;
-            $article->save();
-            Router::redirect('/admin?access=admin');
+        if (empty($_POST['id'])) {
+            $article = new \App\Models\Article();
+        } else {
+            $article = \App\Models\Article::findById($_POST['id']);
         }
+        $author = $this->getAuthor(filter_var($_POST['author'], FILTER_SANITIZE_STRING));
+        $data = filter_var_array($_POST);
+        $data['author_id'] = $author->id;
+        $article->fill($data);
+        $article->save();
+        Router::redirect('/admin?access=admin');
     }
 
     protected function getAuthor(string $fullName): \App\Models\Author

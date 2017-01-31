@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Controllers\Error;
+
 class Router
 {
 
@@ -13,12 +15,19 @@ class Router
         $actionName = !empty($urlParts[2]) ? $urlParts[2] : 'Index';
         $controllerClass = '\\App\\Controllers\\' . $controllerName;
 
-        if (!class_exists($controllerClass)) {
-            die('Controller was not found');
+        try {
+            if (class_exists($controllerClass)) {
+                $controller = new $controllerClass;
+                $controller->action($actionName);
+            } else {
+                throw new \App\Exceptions\NotFoundException('Route not found');
+            }
+        } catch (Exceptions\DbException $e) {
+            (new Error($e))->action('exception');
+        } catch (Exceptions\NotFoundException $e) {
+            (new Error($e))->action('notFound');
         }
 
-        $controller = new $controllerClass;
-        $controller->action($actionName);
     }
 
     public static function redirect($url)
