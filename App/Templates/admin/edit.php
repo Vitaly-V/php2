@@ -17,13 +17,25 @@
         <div class="text"><b>Text</b><br>
             <textarea name="text"><?= $article->text; ?></textarea>
         </div>
-        <div class="author"><b>Author</b><br>
-            <input name="author" type="text"
-                   value="<?= $article->author->firstname; ?> <?= $article->author->firstname; ?>">
-            <div>
-                <input name="id" type="hidden" value="<?= $article->id; ?>">
-                <input type="submit" value="Update">
-            </div>
+        <div><b>Author: </b></div>
+        <div class="author">
+            <select name="author_id">
+s                <?php foreach ($authors as $author) : ?>
+                    <option value="<?= $author->id; ?>"
+                        <?php if (isset($article->author_id) && $author->id === $article->author_id): ?>
+                            selected="selected"
+                        <?php endif; ?>
+                    >
+                        <?php echo $author->firstname . ' ' . $author->lastname; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <br/>
+        <div>
+            <input name="id" type="hidden" value="<?= $article->id; ?>">
+            <input type="submit" value="Update">
+        </div>
     </form>
 </div>
 </body>
