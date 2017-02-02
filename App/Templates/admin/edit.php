@@ -20,7 +20,7 @@
         <div><b>Author: </b></div>
         <div class="author">
             <select name="author_id">
-s                <?php foreach ($authors as $author) : ?>
+                <?php foreach ($authors as $author) : ?>
                     <option value="<?= $author->id; ?>"
                         <?php if (isset($article->author_id) && $author->id === $article->author_id): ?>
                             selected="selected"
