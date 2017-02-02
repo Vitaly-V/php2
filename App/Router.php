@@ -2,37 +2,20 @@
 
 namespace App;
 
-use App\Controllers\Error;
+use App\Tools\WebsiteTools;
 
 class Router
 {
 
-    public static function run()
+    public static function getRoute($url)
     {
-        $url = parse_url($_SERVER['REQUEST_URI']);
-        $urlParts = explode('/', $url['path']);
+        $urlParts = WebsiteTools::getUrlPathArray($url);
         $controllerName = !empty($urlParts[1]) ? $urlParts[1] : 'Index';
-        $actionName = !empty($urlParts[2]) ? $urlParts[2] : 'Index';
-        $controllerClass = '\\App\\Controllers\\' . $controllerName;
-
-        try {
-            if (class_exists($controllerClass)) {
-                $controller = new $controllerClass;
-                $controller->action($actionName);
-            } else {
-                throw new \App\Exceptions\NotFoundException('Route not found');
-            }
-        } catch (Exceptions\DbException $e) {
-            (new Error($e))->action('exception');
-        } catch (Exceptions\NotFoundException $e) {
-            (new Error($e))->action('notFound');
+        $route['action'] = !empty($urlParts[2]) ? $urlParts[2] : 'Index';
+        $route['controller'] = '\\App\\Controllers\\' . $controllerName;
+        if (!class_exists($route['controller'])) {
+            return false;
         }
-
-    }
-
-    public static function redirect($url)
-    {
-        header('Location: ' . $url);
-        die;
+        return $route;
     }
 }

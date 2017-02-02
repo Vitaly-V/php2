@@ -17,9 +17,17 @@
         <div class="text"><b>Text</b><Br>
             <textarea name="text"></textarea>
         </div>
-        <div class="author"><b>Author:</b><br>
-            <input name="author" type="text">
+        <div><b>Author: </b></div>
+        <div class="author">
+            <select name="author_id">
+                <?php foreach ($authors as $author) : ?>
+                    <option value="<?= $author->id; ?>">
+                        <?php echo $author->firstname . ' ' . $author->lastname; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
+        <br/>
         <div>
             <input type="submit" value="Publish">
         </div>
